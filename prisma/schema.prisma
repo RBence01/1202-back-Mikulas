@@ -12,3 +12,29 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model toy {
+  id Int @id @default(autoincrement())
+  name String
+  material Material
+  weight Decimal @db.Decimal(4, 2)
+
+  children child[]
+}
+
+model child {
+  id Int @id @default(autoincrement())
+  name String
+  location String
+  isGood Boolean @default(true)
+
+  toy toy? @relation(references: [id], fields: [toyId], onDelete: SetNull, onUpdate: Cascade)
+  toyId Int?
+}
+
+enum Material {
+  wood
+  metal
+  plastic
+  other
+}
